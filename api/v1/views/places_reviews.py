@@ -46,7 +46,7 @@ def list_reviews(place_id=None):
 @app_views.route("/reviews/<review_id>",
                  strict_slashes=False,
                  methods=['GET', 'DELETE', 'PUT'])
-def find_place(review_id=None):
+def find_review(review_id=None):
     """find place with id"""
     if review_id is None:
         abort(404)
