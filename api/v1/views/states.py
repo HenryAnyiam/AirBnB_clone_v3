@@ -26,11 +26,11 @@ def list_states(state_id=None):
         if state_id is None:
             values = all_states.values()
             states = [i.to_dict() for i in values]
-            return states
+            return jsonify(states)
         state = [i.to_dict() for i in values if i.id == state_id]
         if len(state) == 0:
             abort(404)
-        return state[0]
+        return jsonify(state[0])
     elif request.method == 'POST':
         """Handle POST method to create a new State instance"""
         try:
@@ -41,7 +41,7 @@ def list_states(state_id=None):
             if 'name' in value:
                 state = State(name=value.get('name'))
                 state.save()
-                return make_response(state.to_dict(), 201)
+                return make_response(jsonify(state.to_dict()), 201)
             else:
                 return make_response(jsonify({'error': 'Missing name'}), 400)
     elif (request.method == 'DELETE') or (request.method == 'PUT'):
@@ -68,4 +68,4 @@ def list_states(state_id=None):
                         if i not in ignore:
                             setattr(all_states[state_id], i, value.get(i))
                             storage.save()
-                    return make_response(state[0].to_dict(), 201)
+                    return make_response(jsonify(state[0].to_dict()), 201)
