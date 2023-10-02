@@ -31,9 +31,12 @@ def list_user(user_id=None):
         except Exception:
             return make_response(jsonify({'error': 'Not a JSON'}), 400)
         else:
-            if 'name' not in value:
-                return make_response(jsonify({'error': 'Missing name'}), 400)
-            user = User(name=value.get('name'))
+            if 'email' not in value:
+                return make_response(jsonify({'error': 'Missing email'}), 400)
+            if 'password' not in value:
+                val = jsonify({'error': 'Missing password'})
+                return make_response(val, 400)
+            user = User(**value)
             user.save()
             return make_response(jsonify(user.to_dict()), 201)
     elif request.method == 'DELETE':
@@ -46,7 +49,7 @@ def list_user(user_id=None):
         except Exception:
             return make_response(jsonify({'error': 'Not a JSON'}), 400)
         else:
-            ignore = ['id', 'created_at', 'updated_at']
+            ignore = ['id','email', 'created_at', 'updated_at']
             for i in value:
                 if i not in ignore:
                     setattr(user[0], i, value.get(i))

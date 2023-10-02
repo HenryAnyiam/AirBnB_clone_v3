@@ -35,7 +35,7 @@ def list_states(state_id=None):
             return make_response(jsonify({'error': 'Not a JSON'}), 400)
         else:
             if 'name' in value:
-                state = State(name=value.get('name'))
+                state = State(**value)
                 state.save()
                 return make_response(jsonify(state.to_dict()), 201)
             else:

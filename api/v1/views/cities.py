@@ -32,7 +32,8 @@ def list_city(state_id=None):
         else:
             if 'name' not in values:
                 return make_response(jsonify({'error': 'Missing name'}), 400)
-            city = City(state_id=state_id, name=values.get('name'))
+            values['state_id'] = state_id
+            city = City(**values)
             city.save()
             return make_response(jsonify(city.to_dict()), 201)
 
