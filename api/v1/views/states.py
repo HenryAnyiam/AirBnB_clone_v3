@@ -54,7 +54,10 @@ def list_states(state_id=None):
             if len(state) == 0:
                 abort(404)
             if request.method == 'DELETE':
-                del all_states[f'State.{state_id}']
+                state = all_states[state[0]]
+                for i in state.cities:
+                    storage.delete(i)
+                storage.delete(state)
                 storage.save()
                 return make_response(jsonify({}), 200)
             else:

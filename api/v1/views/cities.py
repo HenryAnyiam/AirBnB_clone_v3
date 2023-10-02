@@ -67,6 +67,6 @@ def find_city(city_id=None):
                     storage.save()
             return make_response(jsonify(city[0].to_dict()), 200)
     elif request.method == 'DELETE':
-        del storage.all(City)[f'City.{city_id}']
+        storage.delete(city[0])
         storage.save()
         return make_response(jsonify({}), 200)
