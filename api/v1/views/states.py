@@ -23,8 +23,8 @@ def list_states(state_id=None):
     all_states = storage.all(State)
     """handle GET method"""
     if request.method == 'GET':
+        values = all_states.values()
         if state_id is None:
-            values = all_states.values()
             states = [i.to_dict() for i in values]
             return jsonify(states)
         state = [i.to_dict() for i in values if i.id == state_id]
@@ -54,7 +54,7 @@ def list_states(state_id=None):
             if len(state) == 0:
                 abort(404)
             if request.method == 'DELETE':
-                del all_states[state_id]
+                del all_states[f'State.{state_id}']
                 storage.save()
                 return make_response(jsonify({}), 200)
             else:
@@ -66,6 +66,7 @@ def list_states(state_id=None):
                     for i in value:
                         ignore = ['id', 'created_at', 'updated_at']
                         if i not in ignore:
-                            setattr(all_states[state_id], i, value.get(i))
+                            setattr(all_states[state[0]], i, value.get(i))
                             storage.save()
-                    return make_response(jsonify(state[0].to_dict()), 201)
+                    new = jsonify(all_states[state[0]].to_dict())
+                    return make_response(new, 201)
