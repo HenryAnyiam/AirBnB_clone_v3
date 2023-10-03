@@ -23,7 +23,7 @@ def list_place(city_id=None):
     places = storage.all(Place).values()
     place = [i for i in places if i.city_id == city_id]
     if request.method == 'GET':
-        list_place = [i for i in places if i.city_id == city_id]
+        list_place = [i.to_dict() for i in place]
         return jsonify(list_place)
     elif request.method == 'POST':
         try:
@@ -37,7 +37,7 @@ def list_place(city_id=None):
                 val = jsonify({'error': 'Missing user_id'})
                 return make_response(val, 400)
             users = storage.all(User).values()
-            user = [i for i in users if i.user_id == values['user_id']]
+            user = [i for i in users if i.id == values['user_id']]
             if len(user) == 0:
                 abort(403)
             values['city_id'] = city_id
@@ -60,7 +60,7 @@ def find_place(place_id=None):
     if request.method == 'GET':
         return jsonify(place[0].to_dict())
     elif request.method == 'PUT':
-        ignore = ['id', 'user_id','city_id', 'created_at', 'updated_at']
+        ignore = ['id', 'user_id', 'city_id', 'created_at', 'updated_at']
         try:
             values = request.get_json()
         except Exception:

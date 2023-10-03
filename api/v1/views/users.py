@@ -49,8 +49,9 @@ def list_user(user_id=None):
         except Exception:
             return make_response(jsonify({'error': 'Not a JSON'}), 400)
         else:
-            ignore = ['id','email', 'created_at', 'updated_at']
+            ignore = ['id', 'email', 'created_at', 'updated_at']
             for i in value:
                 if i not in ignore:
                     setattr(user[0], i, value.get(i))
+                    storage.save()
             return make_response(jsonify(user[0].to_dict()), 200)

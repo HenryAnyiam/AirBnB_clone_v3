@@ -22,7 +22,7 @@ def list_reviews(place_id=None):
         abort(404)
     reviews = storage.all(reviews).values()
     if request.method == 'GET':
-        list_review = [i for i in reviews if i.place_id == place_id]
+        list_review = [i.to_dict() for i in reviews if i.place_id == place_id]
         return jsonify(list_review)
     elif request.method == 'POST':
         try:
@@ -37,6 +37,8 @@ def list_reviews(place_id=None):
             user = [i for i in users if i.id == values['user_id']]
             if len(user) == 0:
                 abort(404)
+            if 'text' not in values:
+                return make_response(jsonify({'error': 'Missing text'}), 400)
             values['place_id'] = place_id
             review = Review(**values)
             review.save()
@@ -47,7 +49,7 @@ def list_reviews(place_id=None):
                  strict_slashes=False,
                  methods=['GET', 'DELETE', 'PUT'])
 def find_review(review_id=None):
-    """find place with id"""
+    """find review with id"""
     if review_id is None:
         abort(404)
     reviews = storage.all(Review).values()

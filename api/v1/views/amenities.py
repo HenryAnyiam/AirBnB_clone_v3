@@ -33,7 +33,7 @@ def list_amenities(amenity_id=None):
         else:
             if 'name' not in value:
                 return make_response(jsonify({'error': 'Missing name'}), 400)
-            amenity = Amenity(name=value.get('name'))
+            amenity = Amenity(**value)
             amenity.save()
             return make_response(jsonify(amenity.to_dict()), 201)
     elif request.method == 'DELETE':
@@ -50,4 +50,5 @@ def list_amenities(amenity_id=None):
             for i in value:
                 if i not in ignore:
                     setattr(amenity[0], i, value.get(i))
+                    storage.save()
             return make_response(jsonify(amenity[0].to_dict()), 200)
