@@ -26,9 +26,8 @@ def list_place(city_id=None):
         list_place = [i.to_dict() for i in place]
         return jsonify(list_place)
     elif request.method == 'POST':
-        try:
-            values = request.get_json()
-        except Exception:
+        values = request.get_json()
+        if values is None:
             return make_response(jsonify({'error': 'Not a JSON'}), 400)
         else:
             if 'name' not in values:
@@ -61,9 +60,8 @@ def find_place(place_id=None):
         return jsonify(place[0].to_dict())
     elif request.method == 'PUT':
         ignore = ['id', 'user_id', 'city_id', 'created_at', 'updated_at']
-        try:
-            values = request.get_json()
-        except Exception:
+        values = request.get_json()
+        if values is None:
             return make_response(jsonify({'error': 'Not a JSON'}), 400)
         else:
             for i in values:
@@ -75,3 +73,13 @@ def find_place(place_id=None):
         storage.delete(place[0])
         storage.save()
         return make_response(jsonify({}), 200)
+
+
+@app_views.route("/place_search",
+                 strict_slashes=False,
+                 methods=['POST'])
+def place_search():
+    """retrieves places depending on given JSON"""
+    value = request.get_json()
+    if value is None:
+        abort(400, descricption="Not a JSON")

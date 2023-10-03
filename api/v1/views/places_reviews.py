@@ -25,9 +25,8 @@ def list_reviews(place_id=None):
         list_review = [i.to_dict() for i in reviews if i.place_id == place_id]
         return jsonify(list_review)
     elif request.method == 'POST':
-        try:
-            values = request.get_json()
-        except Exception:
+        values = request.get_json()
+        if values is None:
             return make_response(jsonify({'error': 'Not a JSON'}), 400)
         else:
             if 'user_id' not in values:
@@ -60,9 +59,8 @@ def find_review(review_id=None):
         return jsonify(review[0].to_dict())
     elif request.method == 'PUT':
         ignore = ['id', 'user_id', 'place_id', 'created_at', 'updated_at']
-        try:
-            values = request.get_json()
-        except Exception:
+        values = request.get_json()
+        if values is None:
             return make_response(jsonify({'error': 'Not a JSON'}), 400)
         else:
             for i in values:

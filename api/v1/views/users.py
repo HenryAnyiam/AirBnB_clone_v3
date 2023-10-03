@@ -26,9 +26,8 @@ def list_user(user_id=None):
             return jsonify(user_list)
         return jsonify(user[0].to_dict())
     elif request.method == 'POST':
-        try:
-            value = request.get_json()
-        except Exception:
+        value = request.get_json()
+        if value is None:
             return make_response(jsonify({'error': 'Not a JSON'}), 400)
         else:
             if 'email' not in value:
@@ -44,9 +43,8 @@ def list_user(user_id=None):
         storage.save()
         return make_response(jsonify({}), 200)
     elif request.method == 'PUT':
-        try:
-            value = request.get_json()
-        except Exception:
+        value = request.get_json()
+        if value is None:
             return make_response(jsonify({'error': 'Not a JSON'}), 400)
         else:
             ignore = ['id', 'email', 'created_at', 'updated_at']

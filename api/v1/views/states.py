@@ -29,9 +29,8 @@ def list_states(state_id=None):
         return jsonify(state[0])
     elif request.method == 'POST':
         """Handle POST method to create a new State instance"""
-        try:
-            value = request.get_json()
-        except Exception:
+        value = request.get_json()
+        if value is None:
             return make_response(jsonify({'error': 'Not a JSON'}), 400)
         else:
             if 'name' in value:
@@ -57,9 +56,8 @@ def list_states(state_id=None):
                 storage.save()
                 return make_response(jsonify({}), 200)
             else:
-                try:
-                    value = request.get_json()
-                except Exception:
+                value = request.get_json()
+                if value is None:
                     return make_response(jsonify({'error': 'Not a JSON'}), 400)
                 else:
                     for i in value:

@@ -25,9 +25,8 @@ def list_city(state_id=None):
             cities.append(city.to_dict())
         return jsonify(cities)
     elif request.method == 'POST':
-        try:
-            values = request.get_json()
-        except Exception:
+        values = request.get_json()
+        if values is None:
             return make_response(jsonify({'error': 'Not a JSON'}), 400)
         else:
             if 'name' not in values:
@@ -53,9 +52,8 @@ def find_city(city_id=None):
         return jsonify(city[0].to_dict())
     elif request.method == 'PUT':
         ignore = ['id', 'state_id', 'created_at', 'updated_at']
-        try:
-            values = request.get_json()
-        except Exception:
+        values = request.get_json()
+        if values is None:
             return make_response(jsonify({'error': 'Not a JSON'}), 400)
         else:
             for i in values:
