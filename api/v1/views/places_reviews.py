@@ -20,7 +20,7 @@ def list_reviews(place_id=None):
     place = [i for i in places if i.id == place_id]
     if len(place) == 0:
         abort(404)
-    reviews = storage.all(reviews).values()
+    reviews = storage.all(Review).values()
     if request.method == 'GET':
         list_review = [i.to_dict() for i in reviews if i.place_id == place_id]
         return jsonify(list_review)
